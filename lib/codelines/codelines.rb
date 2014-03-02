@@ -13,6 +13,13 @@ module CodeLines
 class << self
   attr_reader :adapter
 
+  def adapters
+    Dir.glob(File.expand_path('../adapters/*.rb', __FILE__)).sort { |a, b| b <=> a }.map { |f|
+      f = File.basename(f).split(?.)[0]
+    }
+  end
+    alias_method :list, :adapters
+
   def setup(adapter, profile)
     @adapter = adapter.new profile
   end
