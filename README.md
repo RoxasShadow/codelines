@@ -20,7 +20,7 @@ github = CodeLines::GitHub.new 'RoxasShadow' # the owner of the repositories we 
 github.authenticate 'USERNAME', 'PASSWORD'   # authentication is not required, but it avoids to incurring to limit exceeded errors
 
 github.count repository: [ { name: :codelines }, { name: :chainedexpressions}  } ] # return the sum of the lines of code contained in given repositories
-github.count repository: [ { name: :mescalina, branch: :'last-episode-preview' } ], ignore_comments: false # select the given branch ignoring the comments
+github.count repository: [ { name: :mescalina, branch: :'last-episode-preview' } ], ignore_comments: true # select the given branch ignoring the comments
 github.count repository: [ { name: :codelines                                  } ], reload: true # count the lines contained in this repository without using the cache
 github.count repository: [ { name: :codelines, ignore: %w(README.md)           } ] # return the sum of the lines of code contained in given repositories ignoring README.md
 ```
