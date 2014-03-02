@@ -1,0 +1,61 @@
+#! /usr/bin/env ruby
+#--
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#                    Version 2, December 2004
+#
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+#
+#  0. You just DO WHAT THE FUCK YOU WANT TO.
+#++
+require 'codelines'
+require 'optparse'
+
+options = {}
+
+OptionParser.new do |o|
+  o.on '-l', '--list', 'Show available adapters' do
+    abort 'Available adapters:'.tap { |s|
+      CodeLines.adapters.sort { |a, b| a <=> b }.each { |p| s << "\n" + (' ' * 3) + p }
+    }
+  end
+
+  o.on '-a', '--adapter ADAPTER', 'The adapter to use' do |adapter|
+    options[:adapter        ] = adapter.downcase
+  end
+
+  o.on '-p', '--profile PROFILE'                       do |profile|
+    options[:profile        ] = profile
+  end
+
+  o.on '-r', '--repository REPOSITORY'                 do |repository|
+    options[:repository     ] = repository
+  end
+
+  o.on '-b', '--branch BRANCH', 'Select a branch different from `master\'' do |branch|
+    options[:branch         ] = branch
+  end
+
+  o.on '-c', '--no-comments', 'Ignore comments'        do |branch|
+    options[:ignore_comments] = true
+  end
+
+  o.on '-s', '--authenticate USERNAME:PASSWORD', 'Perform the sign in'     do |data|
+    data = data.split ?:
+    options[:username] = data.shift
+    options[:password] = data.pop
+  end
+end.parse!
+
+abort 'You must select an adapter, a profile and a repository.' if !options[:adapter] || !options[:profile] || !options[:repository]
+
+require "codelines/adapters/#{options[:adapter]}"
+
+adapter = CodeLines.constants.map { |p|
+      "CodeLines::#{p}".split('::').inject(Object) { |o, c| o.const_get c }
+  }.select { |c| c.to_s.split('::').last.downcase == options[:adapter] }.first
+
+github = CodeLines::GitHub.new options[:profile]
+github.authenticate options[:username], options[:password] if options[:username] && options[:password]
+
+puts github.count repository: [ { name: options[:repository], branch: options[:branch] } ], ignore_comments: options[:ignore_comments]
