@@ -30,11 +30,12 @@ class GitHub < Adapter
     reload          = options[:reload]          || false
 
     lines = 0
-    repos.each { |name|
-      @repositories[name] = fetch(name) if reload || !@repositories.include?(name)
+    repos.each { |repo|
+      name                = repo[:name]
+      @repositories[name] = fetch(repo) if reload || !@repositories.include?(name)
 
       @repositories[name].each { |github|
-        next if name[:ignore].is_a?(Array) && name[:ignore].include?(github.name)
+        next if repo[:ignore].is_a?(Array) && repo[:ignore].include?(github.name)
 
         source = Base64.decode64 github.content
         source.gsub!(/\r\n?/m, "\n")
