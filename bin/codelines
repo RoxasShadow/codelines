@@ -36,15 +36,15 @@ OptionParser.new do |o|
     options[:branch         ] = branch
   end
 
-  o.on '-c', '--no-comments',   'Ignore comments'           do |branch|
+  o.on '-c', '--no-comments',   'Ignore comments' do
     options[:ignore_comments] = true
   end
 
-  o.on '-i', '-ignore FILE1,FILE2...', 'Ignore given files' do |files|
-    options[:ignore] = files.split ?,
+  o.on '-i', '-ignore FILE1,FILE2...', 'Ignore given files'            do |files|
+    options[:ignore         ] = files.split ?,
   end
 
-  o.on '-s', '--authenticate USERNAME:PASSWORD', 'Perform the sign in'     do |data|
+  o.on '-s', '--authenticate USERNAME:PASSWORD', 'Perform the sign in' do |data|
     data = data.split ?:
     options[:username] = data.shift
     options[:password] = data.pop
@@ -59,7 +59,7 @@ adapter = CodeLines.constants.map { |p|
       "CodeLines::#{p}".split('::').inject(Object) { |o, c| o.const_get c }
   }.select { |c| c.to_s.split('::').last.downcase == options[:adapter] }.first
 
-github = CodeLines::GitHub.new options[:profile]
-github.authenticate options[:username], options[:password] if options[:username] && options[:password]
+CodeLines.setup CodeLines::GitHub, options[:profile]
+CodeLines.authenticate options[:username], options[:password] if options[:username] && options[:password]
 
-puts github.count repository: [ { name: options[:repository], branch: options[:branch], ignore: options[:ignore] } ], ignore_comments: options[:ignore_comments]
+puts CodeLines.count repository: [ { name: options[:repository], branch: options[:branch], ignore: options[:ignore] } ], ignore_comments: options[:ignore_comments]

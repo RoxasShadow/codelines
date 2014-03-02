@@ -14,7 +14,12 @@ class << self
   attr_reader :adapter
 
   def setup(adapter, profile)
-    @adapter = adapter.new self, profile
+    @adapter = adapter.new profile
+  end
+
+  def authentication(*args, &block)
+    raise LoadError, 'adapter not found' unless @adapter
+    @adapter.authentication *args, &block
   end
 
   def count(*args, &block)
