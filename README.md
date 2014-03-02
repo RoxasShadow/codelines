@@ -1,6 +1,7 @@
 CodeLines
 =========
 Count the number of lines of code contained in one or more repositories.
+
 Currently there's just the support to GitHub, but feel free to make new adapters for any hosting website you want.
 
 Install
