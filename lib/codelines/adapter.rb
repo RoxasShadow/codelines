@@ -12,11 +12,11 @@ module CodeLines
 
 class Adapter
   def authenticate(*args, &block)
-    raise NotImplementedError, 'authenticate has been not implemented'
+    raise NotImplementedError, 'authenticate has not been implemented'
   end
 
   def count(*args, &block)
-    raise NotImplementedError, 'count has been not implemented'
+    raise NotImplementedError, 'count has not been implemented'
   end
 
   protected

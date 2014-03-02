@@ -34,6 +34,8 @@ class GitHub < Adapter
       @repositories[name] = fetch(name) if reload || !@repositories.include?(name)
 
       @repositories[name].each { |github|
+        next if name[:ignore].is_a?(Array) && name[:ignore].include?(github.name)
+
         source = Base64.decode64 github.content
         source.gsub!(/\r\n?/m, "\n")
         source.gsub!(/\/\*![^*]*\*+(?:[^*\/][^*]*\*+)*\//m, '') if ignore_comments
