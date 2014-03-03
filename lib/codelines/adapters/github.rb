@@ -22,12 +22,11 @@ class GitHub < Adapter
   def authenticate(username, password)
     @github = Github.new basic_auth: "#{username}:#{password}"
   end
-    alias_method :login, :authenticate
 
   def count(options = {}, &block)
     repos           = options[:repository     ] || []
     ignore_comments = options[:ignore_comments] || false
-    reload          = options[:reload]          || false
+    reload          = options[:reload         ] || false
 
     lines = 0
     repos.each { |repo|
