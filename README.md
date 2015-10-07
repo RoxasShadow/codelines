@@ -12,7 +12,7 @@ Example
 -------
 You can use *codelines* running the built-in executable or using the gem in a ruby script.
 
-`$ codelines --adapter github --profile RoxasShadow --repository codelines`
+`$ codelines --adapter github --profile RoxasShadow --repository codelines -i README.md,Rakefile`
 
 ```ruby
 require 'codelines'
