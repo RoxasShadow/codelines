@@ -18,8 +18,8 @@ You can use *codelines* running the built-in executable or using the gem in a ru
 require 'codelines'
 require 'codelines/adapters/github' # the adapter we want to use
 
-CodeLines.setup CodeLines::GitHub, 'RoxasShadow' # the owner of the repositories we want to analyze
-CodeLines.authenticate 'USERNAME', 'PASSWORD'    # authentication is not required, but it avoids to incurring to limit exceeded errors
+github = CodeLines.setup CodeLines::GitHub, 'RoxasShadow' # the owner of the repositories we want to analyze
+github.authenticate 'USERNAME', 'PASSWORD'                # authentication is not required, but it avoids to incurring to limit exceeded errors
 
 CodeLines.count repository: [ { name: :codelines }, { name: :chainedexpressions}  ] # return the sum of the lines of code contained in given repositories
 CodeLines.count repository: [ { name: :mescalina, branch: :'last-episode-preview' ], ignore_comments: true # select the given branch ignoring the comments
